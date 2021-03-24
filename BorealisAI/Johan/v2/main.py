@@ -3,11 +3,11 @@ import numpy as np
 import json
 
 # Globals
-ORDEROUTFILE = './orders.json'
+ORDEROUTFILE = "./ordersDaily.json"
 
 
 def main():
-    for dayIndex in range(0, 1):
+    for dayIndex in range(0, 365):
         # Constructor sets up the time object and variables
         dailyRestaurant = Restaurant(dayIndex)
         dailyRestaurant.generateOrdersForDay()
