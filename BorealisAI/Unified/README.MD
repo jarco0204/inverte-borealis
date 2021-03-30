@@ -17,6 +17,7 @@ This project contains the Unified ramdon data generator.
 • Su work from 12pm-5:30pm
 
 ## How to Run?
+Install python-dateutil with pip or conda.
 
 # GenerateAverageNumOrders Module
 • python GenerateAverageNumOrders.py
