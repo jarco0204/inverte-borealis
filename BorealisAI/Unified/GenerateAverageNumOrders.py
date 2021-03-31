@@ -22,7 +22,9 @@ def main(year=2020):
             mod, weather = weatherMod(yearData[i][j][1])
             yearData[i][j][0] *= mod
             yearData[i][j][0] = int(yearData[i][j][0])
+            yearData[i][j][0] = distributePeriods(yearData[i][j][0])
             yearData[i][j].append(weather)
+    print(yearData)
 """
     Return array containing each day. Each cell has the format [numOfOrders, timestamp]
     NOTE: Uses relativedelta method from python-dateutil
@@ -103,6 +105,17 @@ def weatherMod(date):
 
 def randomMod():
     return random.uniform(0.8,1.2)
+
+def distributePeriods(n):
+
+    result = []
+    result.append(int((0.15*n)/1))
+    result.append(int((0.50*n)/1))
+    result.append(int((0.35*n)/1))
+    return result
+
+### yearsData[month][day][0][period]
+### yearsData[0-11][0-30][0-2] //[0-2] if previous == 0
 
 def createOrderPerDaysYearMatrix(start):
     # Set variables
