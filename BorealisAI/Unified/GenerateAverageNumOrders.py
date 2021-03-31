@@ -9,7 +9,6 @@ from calendar import monthrange
     @arg year determines which year to create datetime object
 """
 
-
 def main(year=2020):
     START_DATE = datetime.datetime(year, 1, 1)
     yearData = createOrderPerDaysYearMatrix(START_DATE)  # 2D array
@@ -24,7 +23,7 @@ def main(year=2020):
             yearData[i][j][0] = int(yearData[i][j][0])
             yearData[i][j][0] = distributePeriods(yearData[i][j][0])
             yearData[i][j].append(weather)
-    print(yearData)
+    return yearData
 """
     Return array containing each day. Each cell has the format [numOfOrders, timestamp]
     NOTE: Uses relativedelta method from python-dateutil
