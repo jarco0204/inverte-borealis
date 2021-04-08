@@ -50,19 +50,15 @@ def dateToInteger(date):
 
 def pdToTensor(dataframe):
     weathers = ['snowStorm', 'snowy', 'rain', 'freezingRain', 'clear']
-    #print(dataframe.head())
     newDF = pd.get_dummies(dataframe, prefix='', prefix_sep='')
-    print(newDF.head())
-    print(len(newDF))
     newDF['day'] = newDF.apply(lambda row: dateToInteger(row.name), axis=1)
     newDF['Hour'] = newDF.apply(lambda row: int(str(row.name).split(' ')[1].split(':')[0]), axis=1)
-    print(newDF.head(50))
-
+    
     rows, columns = dataframe.shape
     ## Create the new tensor set depending on the sizes of the data frame
     newTensor = torch.zeros(rows, columns)
     
-    '''print(f'Dimesions of dataframe: {dataRefined.shape}, dimensions of tensor: {tensorData.shape}')
+    '''
     for i in range(dataRefined.shape[0]):
         for j in range(1,dataRefined.shape[1]-1):
             tensorData[i][j] = torch.tensor(dataRefined.iloc[i,j])
