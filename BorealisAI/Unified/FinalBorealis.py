@@ -1,25 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[10]:
-
-
 import numpy as np
 import datetime
 import random
 import pandas as pd
 from dateutil.relativedelta import *
 from calendar import monthrange
-
-
-# ### The following function creates a year-long list of days, each item in the list will be a list containing information relevant to that specific day.
-# 
-# ### The information for each item is in the following format [[Breakfast, Lunch, Dinner], date of the year, weather condition].
-# 
-# ### Based on this information, we can determine how many customers made an order depending on the day period (B, L, D), and the weather conditions that location was presenting during that specific day.
-
-# In[11]:
-
+import json
 
 def main(year=2020):
     START_DATE = datetime.datetime(year, 1, 1)
@@ -125,9 +110,6 @@ def distributePeriods(n):
     result.append(int((0.35*n)/1))
     return result
 
-### yearsData[month][day][0][period]
-### yearsData[0-11][0-30][0-2] //[0-2] if previous == 0
-
 def createOrderPerDaysYearMatrix(start):
     # Set variables
     yearAr = []  # 2D array
@@ -169,56 +151,6 @@ def createOrderPerDaysYearMatrix(start):
     # print(START_DATE)
 
     # print(yearOrders)
-
-
-if __name__ == "__main__":
-    main()
-    yearData = DataGenerator()
-
-    dfSubway = pd.DataFrame(yearData.generateData())
-    #dfSubway
-
-
-    # In[16]:
-
-
-    num_rows = len(dfSubway.index)
-
-    print(num_rows)
-
-
-    # ### The following functions represent the food pan operations for the 5 different protein types available, and the remaining 4 ingredients. This implementation will change in the next days to have more reusable and practical code.
-
-    # In[17]:
-    
-
-
-    dfSubway["TunaFP"] = tunaFPtotal()
-    dfSubway["MeatballFP"] = meatballFPtotal()
-    dfSubway["ChickenFP"] = chickenFPtotal()
-    dfSubway["SteakFP"] = steakFPtotal()
-    dfSubway["ChcknTkiFP"] = chickenTFPtotal()
-    dfSubway["CheeseFP"] = cheeseFPtotal()
-    dfSubway["TomatoFP"] = tomatoFPtotal()
-    dfSubway["OlivesFP"] = olivesFPtotal()
-    dfSubway["AvocadoFP"] = avocadoFPtotal()
-
-    #dfSubway
-
-
-    # ### This data set is organized by hour and alphabetically. Contains same information as the previous dataset
-
-    # In[19]:
-
-
-    #pd.set_option("display.max_rows", None)
-
-    #dfSubway = dfSubway.sort_values(by='Date',ascending=True)
-    #dfSubway
-
-
-    # In[ ]:
-
 
 
 
@@ -891,5 +823,26 @@ def avocadoFPtotal():
     return resultAvocado
 
 
+###
+##  This function returns the data filtered by hour.
+#
+def filteredByHour(dataFrame):
+    aggregationFunctions = {'Weather':'first','TunaWeight':'sum',
+       'MeatballWeight':'sum', 'ChickenWeight':'sum', 'SteakWeight':'sum', 'ChcknTkiWeight':'sum',
+       'Cheese':'sum', 'Tomato':'sum', 'Olives':'sum', 'Avocado':'sum'}
+    return dataFrame.groupby(dataFrame['Date']).aggregate(aggregationFunctions)
 
 
+if __name__ == "__main__":
+    main()
+    yearData = DataGenerator()
+
+    dfSubway = pd.DataFrame(yearData.generateData())
+    #dfSubway
+    print(dfSubway.columns)
+    aggregationFunctions = {'Weather':'first','TunaWeight':'sum',
+       'MeatballWeight':'sum', 'ChickenWeight':'sum', 'SteakWeight':'sum', 'ChcknTkiWeight':'sum',
+       'Cheese':'sum', 'Tomato':'sum', 'Olives':'sum', 'Avocado':'sum'}
+
+    sub = dfSubway.groupby(dfSubway['Date']).aggregate(aggregationFunctions)
+    

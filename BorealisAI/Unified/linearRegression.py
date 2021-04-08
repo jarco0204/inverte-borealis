@@ -14,13 +14,13 @@ class linearRegression(torch.nn.Module):
     def forward(self, x):
         return self.linear(x)
 
-def train(model, opt, loss_fn, train_dl, n_epoch=3, save_to='./trainedModel.pth'):
+def train(model, opt, loss_fn, train_ld, n_epoch=3, save_to='./trainedModel.pth'):
     ##Iterate through a number of epochs
     for epoch in range(n_epoch):
         ##Training with batches of data
         running_loss = 0.0
-        num_iters = len(train_dl)
-        for i, data in enumerate(train_dl,0):
+        num_iters = len(train_ld)
+        for i, data in enumerate(train_ld,0):
             inputs, labels = data
             #First step: Generate predictions
             pred = model(inputs)
@@ -43,25 +43,28 @@ def train(model, opt, loss_fn, train_dl, n_epoch=3, save_to='./trainedModel.pth'
 def main():
     writer = SummaryWriter()
 
-    dataGen = dg.DataGenerator().generateData()
-    print(dataGen[:2])
-    #inputs (date/hour, type of ingredient)
-
-
-    #targets (amount needed/consumed per hour)
-
-
+    #dataGen = dg.DataGenerator().generateData()
     
+    data = pd.read_json('dataJson.json')
+    dataRefined = dg.filteredByHour(data)
+    
+    #inputs (date/hour, type of ingredient)
+    testSize = int(0.1 * len(dataRefined))
+    trainSize = len(dataRefined)-testSize
 
-    model = linearRegression(7,4)
-    ##Parameters
-    list(model.parameters())
+    trainSet, testSet = torch.utils.data.random_split(dataRefined, [trainSize, testSize])
 
-    #Define Loss
+    trainLoader = torch.utils.data.DataLoader(trainSet, batch_size=4, num_workers=0)
+    testLoader = torch.utils.data.DataLoader(testSet, batch_size=4, num_workers=0)
+
+    print(f"Training set consist of {len(trainSet)}, and the test set consists of {len(testSet)}")
+
+
+    model = linearRegression(11,9)
     loss_fn = F.mse_loss
-
-    #Define optimizer
     opt = torch.optim.SGD(model.parameters(), lr=1e-5)
+
+    train(model, opt, loss_fn, trainLoader, n_epoch=1)
 
 if __name__ == '__main__':
     main()
