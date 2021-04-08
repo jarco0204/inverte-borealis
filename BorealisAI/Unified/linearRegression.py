@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from torch.utils.tensorboard import SummaryWriter
 import FinalBorealis as dg
-
+import datetime
 ## Defining the linear model
 class linearRegression(torch.nn.Module):
     def __init__(self, inputSize, outputSize):
@@ -40,6 +40,36 @@ def train(model, opt, loss_fn, train_ld, n_epoch=3, save_to='./trainedModel.pth'
     torch.save(model.state_dict(), save_to)
     print(f"Trained model is saved to {save_to}.")
 
+def dateToInteger(date):
+    #print(str(date))
+    date = str(date).split('-')
+    #print(date)
+    newVal = datetime.datetime(int(date[0]), int(date[1]), int(date[2].split(' ')[0]))
+    #print(newVal.strftime('%j'))
+    return int(newVal.strftime('%j'))
+
+def pdToTensor(dataframe):
+    weathers = ['snowStorm', 'snowy', 'rain', 'freezingRain', 'clear']
+    #print(dataframe.head())
+    newDF = pd.get_dummies(dataframe, prefix='', prefix_sep='')
+    print(newDF.head())
+    print(len(newDF))
+    newDF['day'] = newDF.apply(lambda row: dateToInteger(row.name), axis=1)
+    newDF['Hour'] = newDF.apply(lambda row: int(str(row.name).split(' ')[1].split(':')[0]), axis=1)
+    print(newDF.head(50))
+
+    rows, columns = dataframe.shape
+    ## Create the new tensor set depending on the sizes of the data frame
+    newTensor = torch.zeros(rows, columns)
+    
+    '''print(f'Dimesions of dataframe: {dataRefined.shape}, dimensions of tensor: {tensorData.shape}')
+    for i in range(dataRefined.shape[0]):
+        for j in range(1,dataRefined.shape[1]-1):
+            tensorData[i][j] = torch.tensor(dataRefined.iloc[i,j])
+
+    print(tensorData)'''
+    return newTensor
+
 def main():
     writer = SummaryWriter()
 
@@ -47,6 +77,8 @@ def main():
     
     data = pd.read_json('dataJson.json')
     dataRefined = dg.filteredByHour(data)
+    dataTensor = pdToTensor(dataRefined)
+    ## Converting the dataframe to a tensor 
     
     #inputs (date/hour, type of ingredient)
     testSize = int(0.1 * len(dataRefined))
@@ -56,7 +88,7 @@ def main():
 
     trainLoader = torch.utils.data.DataLoader(trainSet, batch_size=4, num_workers=0)
     testLoader = torch.utils.data.DataLoader(testSet, batch_size=4, num_workers=0)
-
+    
     print(f"Training set consist of {len(trainSet)}, and the test set consists of {len(testSet)}")
 
 
