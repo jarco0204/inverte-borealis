@@ -56,7 +56,6 @@ def pdToTensor(dataframe):
     newDF = pd.get_dummies(dataframe, prefix='', prefix_sep='')
     newDF['day'] = newDF.apply(lambda row: dateToInteger(row.name), axis=1)
     newDF['Hour'] = newDF.apply(lambda row: int(str(row.name).split(' ')[1].split(':')[0]), axis=1)
-    #print(newDF.columns)
     rows, columns = newDF.shape
     ## Create the new tensor set depending on the sizes of the data frame
     newTensor = torch.zeros(rows, columns)
@@ -71,7 +70,7 @@ def main():
 
     #dataGen = dg.DataGenerator().generateData()
     
-    data = pd.read_json('dataJson.json')
+    data = pd.read_json('./dataJson.json')
     dataRefined = dg.filteredByHour(data)
     dataTensor = pdToTensor(dataRefined)
     ## Converting the dataframe to a tensor 
