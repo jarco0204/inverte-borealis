@@ -103,11 +103,20 @@ def randomMod():
     return random.uniform(0.8,1.2)
 
 def distributePeriods(n):
-
     result = []
+    result.append(int((0.11*n)/1))
+    result.append(int((0.08*n)/1))
+    result.append(int((0.04*n)/1))
+    result.append(int((0.09*n)/1))
     result.append(int((0.15*n)/1))
-    result.append(int((0.50*n)/1))
-    result.append(int((0.35*n)/1))
+    result.append(int((0.10*n)/1))
+    result.append(int((0.05*n)/1))
+    result.append(int((0.01*n)/1))
+    result.append(int((0.03*n)/1))
+    result.append(int((0.10*n)/1))
+    result.append(int((0.13*n)/1))
+    result.append(int((0.08*n)/1))
+    result.append(int((0.03*n)/1))
     return result
 
 def createOrderPerDaysYearMatrix(start):
@@ -497,35 +506,15 @@ class DataGenerator:
     
         dataFullYear = [] #Where data will be stored and returned
         dataChristian = main() #Christian's function to generate the data for each day regarding customer flow and its conditions
-    
+
         for month in range(len(dataChristian)):
             for day in range(len(dataChristian[month])):
-                #temp = 0
-                for period in range(len(dataChristian[month][day][0])):
-                    #if(temp == 0):
-                        #hour = random.randint(9,12)
-                        #date = datetime.datetime(2020, (month + 1), (day + 1), hour)
-                        #temp = 1
-                    #elif(temp == 1):
-                        #hour = random.randint(12,18)
-                        #date = datetime.datetime(2020, (month + 1), (day + 1), hour)
-                        #temp = 2
-                    #elif(temp == 2):
-                        #hour = random.randint(18,22)
-                        #date = datetime.datetime(2020, (month + 1), (day + 1), hour)
-                        #temp = 0
-                    for order in range(dataChristian[month][day][0][period]):
-                        
-                        if(period == 0):
-                            hour = random.randint(9,11)
-                            date = datetime.datetime(2020, (month + 1), (day + 1), hour)
-                        elif(period == 1):
-                            hour = random.randint(12,17)
-                            date = datetime.datetime(2020, (month + 1), (day + 1), hour)
-                        elif(period == 2):
-                            hour = random.randint(18,21)
-                            date = datetime.datetime(2020, (month + 1), (day + 1), hour)
-        
+                temp = 9
+                for period in dataChristian[month][day][0]:
+                    #print(dataChristian[month][day][0])
+                    #print(dataChristian[month][day][0][period])
+                    for order in range(period):
+                        date = datetime.datetime(2020, (month + 1), (day + 1), temp)
                         order = Sandwich()
                         order.generateSandwich()
         
@@ -546,7 +535,8 @@ class DataGenerator:
                                         }
         
                         dataFullYear.append(dataOneOrder)
-        
+                    temp += 1
+                temp = 9
         return dataFullYear
 
 
@@ -834,15 +824,17 @@ def filteredByHour(dataFrame):
 
 
 if __name__ == "__main__":
-    main()
-    yearData = DataGenerator()
+    
+    print(pd.read_json(DataGenerator().generateData())[0])
 
-    dfSubway = pd.DataFrame(yearData.generateData())
+    #yearData = DataGenerator()
+
+    #dfSubway = pd.DataFrame(yearData.generateData())
     #dfSubway
-    print(dfSubway.columns)
-    aggregationFunctions = {'Weather':'first','TunaWeight':'sum',
-       'MeatballWeight':'sum', 'ChickenWeight':'sum', 'SteakWeight':'sum', 'ChcknTkiWeight':'sum',
-       'Cheese':'sum', 'Tomato':'sum', 'Olives':'sum', 'Avocado':'sum'}
+    #print(dfSubway.columns)
+    #aggregationFunctions = {'Weather':'first','TunaWeight':'sum',
+    #   'MeatballWeight':'sum', 'ChickenWeight':'sum', 'SteakWeight':'sum', 'ChcknTkiWeight':'sum',
+    #   'Cheese':'sum', 'Tomato':'sum', 'Olives':'sum', 'Avocado':'sum'}
 
-    sub = dfSubway.groupby(dfSubway['Date']).aggregate(aggregationFunctions)
+    #sub = dfSubway.groupby(dfSubway['Date']).aggregate(aggregationFunctions)
     
