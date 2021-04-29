@@ -1,0 +1,19 @@
+authorName: default
+experimentName: torchLinearRegression
+trialConcurrency: 1
+maxExecDuration: 1h
+maxTrialNum: 200
+#choice: local, remote, pai, kubeflow
+trainingServicePlatform: local
+searchSpacePath: ./searchSpace.json
+#choice: true, false, default: false
+useAnnotation: false
+#choice: true, false, default: false
+multiThread: false
+tuner:
+  #choice: TPE, Random, Anneal, Evolution
+  builtinTunerName: TPE
+trial:
+  command: python3 lrnni.py
+  codeDir: .
+  gpuNum: 0
