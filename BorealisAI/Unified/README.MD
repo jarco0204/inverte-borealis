@@ -17,7 +17,7 @@ This project contains the Unified ramdon data generator.
 • Su work from 12pm-5:30pm
 
 ## How to Run?
-* [Technologies] (#tehcnologies)
+* [Technologies] (#technologies)
 
 To run the experiments simultaneously, run the following commands:
 ```
