@@ -56,7 +56,7 @@ def test(testLoader, model):
 
 def main(args):
     ## Load the data
-    data1, data2, data3 = pd.read_json('./data1.json'), pd.read_json('./data2.json'), pd.read_json('./data3.json')
+    data1, data2, data3 = pd.read_json('../Data/data1.json'), pd.read_json('../Data/data2.json'), pd.read_json('../Data/data3.json')
     frames = [data1, data2, data3]
     data = pd.concat(frames, sort=False)
     outputNorm = preprocessing.normalize([np.array(data['output'])])

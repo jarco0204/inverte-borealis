@@ -14,6 +14,6 @@ tuner:
   #choice: TPE, Random, Anneal, Evolution
   builtinTunerName: TPE
 trial:
-  command: python3 lrnni.py
+  command: python lrnni.py
   codeDir: .
   gpuNum: 0
